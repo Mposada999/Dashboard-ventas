@@ -4,8 +4,9 @@ import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
+import os
 
-# Cargar base de datos desde raíz del repo
+# Cargar base de datos
 df = pd.read_csv("sales_data_sample.csv", encoding="ISO-8859-1")
 df['ORDERDATE'] = pd.to_datetime(df['ORDERDATE'], errors='coerce')
 df['Month'] = df['ORDERDATE'].dt.to_period('M').astype(str)
@@ -102,5 +103,5 @@ def update_scatter_chart(year):
     fig = px.scatter(filtered, x='PRICEEACH', y='SALES', color='PRODUCTLINE', size='QUANTITYORDERED', title=f'Precio vs Ventas en {year}')
     return fig
 
-# Ejecutar servidor
-app.run()
+# Ejecutar servidor en Render
+app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8050)))
